@@ -1,0 +1,6 @@
+name: MystiCore
+version: '${project.version}'
+main: io.github.mystievous.mysticore.MystiCore
+api-version: 1.19
+authors: [ Mystievous ]
+description: Core library for Mystievous' Plugins
