@@ -8,12 +8,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -32,10 +35,10 @@ public class NBTUtils implements Listener {
         return value == (byte) 1;
     }
 
-    public static ItemStack noStack(ItemStack itemStack) {
+    public static ItemStack noStack(Plugin plugin, ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir())
             return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(NO_STACK);
+        NamespacedKey key = NamespacedKey.fromString(NO_STACK, plugin);
         if (key == null)
             return itemStack;
         ItemMeta meta = itemStack.getItemMeta();
@@ -45,10 +48,10 @@ public class NBTUtils implements Listener {
         return itemStack;
     }
 
-    public static ItemStack setUniqueID(String tag, ItemStack itemStack, UUID uuid) {
+    public static ItemStack setUniqueID(Plugin plugin, String tag, ItemStack itemStack, UUID uuid) {
         if (itemStack == null || itemStack.getType().isAir())
             return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
             return itemStack;
         ItemMeta meta = itemStack.getItemMeta();
@@ -62,14 +65,14 @@ public class NBTUtils implements Listener {
         return itemStack;
     }
 
-    public static ItemStack setUniqueID(ItemStack itemStack, UUID uuid) {
-        return setUniqueID(UNIQUE_ID, itemStack, uuid);
+    public static ItemStack setUniqueID(Plugin plugin, ItemStack itemStack, UUID uuid) {
+        return setUniqueID(plugin, UNIQUE_ID, itemStack, uuid);
     }
 
-    public static boolean hasUniqueID(ItemStack itemStack) {
+    public static boolean hasUniqueID(Plugin plugin, ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir())
             return false;
-        NamespacedKey key = NamespacedKey.fromString(UNIQUE_ID);
+        NamespacedKey key = NamespacedKey.fromString(UNIQUE_ID, plugin);
         if (key == null)
             return false;
         ItemMeta meta = itemStack.getItemMeta();
@@ -77,10 +80,10 @@ public class NBTUtils implements Listener {
         return container.has(key);
     }
 
-    public static @Nullable UUID getUniqueID(String tag, ItemStack itemStack) {
+    public static @Nullable UUID getUniqueID(Plugin plugin, String tag, ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir())
             return null;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
             return null;
         ItemMeta meta = itemStack.getItemMeta();
@@ -88,8 +91,8 @@ public class NBTUtils implements Listener {
         return container.get(key, new UUIDDataType());
     }
 
-    public static UUID getUniqueID(ItemStack itemStack) {
-        return getUniqueID(UNIQUE_ID, itemStack);
+    public static UUID getUniqueID(Plugin plugin, ItemStack itemStack) {
+        return getUniqueID(plugin, UNIQUE_ID, itemStack);
     }
 
     /**
@@ -99,10 +102,10 @@ public class NBTUtils implements Listener {
      * @param tagState state to set tag to
      * @return the item with the tag changed
      */
-    public static ItemStack setBool(String tag, ItemStack itemStack, boolean tagState) {
+    public static ItemStack setBool(Plugin plugin, String tag, ItemStack itemStack, boolean tagState) {
         if (itemStack == null || itemStack.getType().isAir())
             return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
             return itemStack;
         ItemMeta meta = itemStack.getItemMeta();
@@ -118,8 +121,8 @@ public class NBTUtils implements Listener {
      * @param itemStack item to set tag on
      * @return the item with the tag changed
      */
-    public static ItemStack setBool(String tag, ItemStack itemStack) {
-        return setBool(tag, itemStack, true);
+    public static ItemStack setBool(Plugin plugin, String tag, ItemStack itemStack) {
+        return setBool(plugin, tag, itemStack, true);
     }
 
     /**
@@ -128,10 +131,10 @@ public class NBTUtils implements Listener {
      * @param itemStack the item to check the tag on
      * @return the value of the boolean tag
      */
-    public static boolean boolState(String tag, ItemStack itemStack) {
+    public static boolean boolState(Plugin plugin, String tag, ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir())
             return false;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
             return false;
         ItemMeta meta = itemStack.getItemMeta();
@@ -139,10 +142,21 @@ public class NBTUtils implements Listener {
         return byteToBool(container.getOrDefault(key, PersistentDataType.BYTE, (byte) 0));
     }
 
-    public static ItemStack setString(String tag, ItemStack itemStack, String string) {
+    public static @Nullable String getString(Plugin plugin, String tag, ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType().isAir())
+            return null;
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
+        if (key == null)
+            return null;
+        ItemMeta meta = itemStack.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        return container.get(key, PersistentDataType.STRING);
+    }
+
+    public static ItemStack setString(Plugin plugin, String tag, ItemStack itemStack, String string) {
         if (itemStack == null || itemStack.getType().isAir())
             return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
             return itemStack;
         ItemMeta meta = itemStack.getItemMeta();
@@ -152,25 +166,25 @@ public class NBTUtils implements Listener {
         return itemStack;
     }
 
-    public static @Nullable String getString(String tag, ItemStack itemStack) {
+    public static boolean hasTag(Plugin plugin, String tag, ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir())
-            return null;
-        NamespacedKey key = NamespacedKey.fromString(tag);
+            return false;
+        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
         if (key == null)
-            return null;
+            return false;
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.get(key, PersistentDataType.STRING);
+        return container.has(key);
     }
 
     public static final String NO_USE_TAG = "no-use";
 
-    public static ItemStack setNoUse(ItemStack itemStack) {
-        return setBool(NO_USE_TAG, itemStack);
+    public static ItemStack setNoUse(Plugin plugin, ItemStack itemStack) {
+        return setBool(MystiCore.getInstance(), NO_USE_TAG, itemStack);
     }
 
-    public static boolean isNoUse(ItemStack itemStack) {
-        return boolState(NO_USE_TAG, itemStack);
+    public static boolean isNoUse(Plugin plugin, ItemStack itemStack) {
+        return boolState(MystiCore.getInstance(), NO_USE_TAG, itemStack);
     }
 
     @EventHandler
@@ -179,7 +193,7 @@ public class NBTUtils implements Listener {
             return;
         CraftingInventory inventory = event.getInventory();
         for (ItemStack item : inventory.getMatrix()) {
-            if (isNoUse(item)) {
+            if (isNoUse(MystiCore.getInstance(), item)) {
                 event.getWhoClicked().sendMessage(Component.text("You can't craft with that!"));
                 event.setCancelled(true);
                 return;
@@ -190,7 +204,7 @@ public class NBTUtils implements Listener {
     @EventHandler
     public void onPlayerShoot(final EntityShootBowEvent event) {
         ItemStack item = event.getConsumable();
-        if (isNoUse(item)) {
+        if (isNoUse(MystiCore.getInstance(), item)) {
             event.getEntity().sendMessage(TextUtil.formatText("The arrow falls out of your bow as you try to shoot.").decoration(TextDecoration.ITALIC, true));
             event.setCancelled(true);
         }
@@ -200,12 +214,21 @@ public class NBTUtils implements Listener {
     public void onCrossbowLoad(final EntityLoadCrossbowEvent event) {
         if (event.getEntity() instanceof InventoryHolder inventoryHolder) {
             for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
-                if (isNoUse(itemStack)) {
+                if (isNoUse(MystiCore.getInstance(), itemStack)) {
                     event.getEntity().sendMessage(TextUtil.formatText("The arrow falls out of your crossbow as you try to load it.").decoration(TextDecoration.ITALIC, true));
                     event.setCancelled(true);
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPotionDrink (final PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
+        if (isNoUse(MystiCore.getInstance(), item)) {
+            event.getPlayer().sendMessage(TextUtil.formatText("You can't use that."));
+            event.setCancelled(true);
         }
     }
 
