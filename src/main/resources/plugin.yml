@@ -1,10 +1,6 @@
 name: MystiCore
-version: '${project.version}'
+version: '${version}'
 main: io.github.mystievous.mysticore.MystiCore
-api-version: 1.19
-authors: [ Mystievous ]
+api-version: '1.20'
+authors: [Mystievous]
 description: Core library for Mystievous' Plugins
-#commands:
-#  custommodel:
-#    description: Sets the custom model id of your currently held item.
-#    usage: /custommodel <Model ID>
