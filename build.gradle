@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'io.github.mystievous'
-version = '1.1.5'
+version = '1.1.6'
 
 repositories {
     mavenCentral()
@@ -47,7 +47,7 @@ processResources {
     def props = [version: version]
     inputs.properties props
     filteringCharset 'UTF-8'
-    filesMatching('paper-plugin.yml') {
+    filesMatching('plugin.yml') {
         expand props
     }
 }
@@ -65,7 +65,9 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            from(components.java)
+            groupId 'io.github.mystievous'
+            artifactId 'mysticore'
+            from components.java
         }
     }
 }
