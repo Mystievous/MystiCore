@@ -33,12 +33,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build/libs/*.jar
-          asset_name: my-project.jar
+          asset_path: ./build/libs/
+          asset_name: MystiCore-${{ env.VERSION }}.jar
           asset_content_type: application/java-archive
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Release Upload
-        uses: d1ceward/draft-assets-release-action@f2997b18bb04e00260f1d67c796b04a56ca6ea2e
-        with:
-          files: build/libs/*.jar
-          token: ${{ secrets.GITHUB_TOKEN }}
