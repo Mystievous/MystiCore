@@ -52,6 +52,7 @@ public class TextUtil {
         }
     }
 
+    @Deprecated
     public static ItemMeta appendQuestItemLore(ItemMeta meta) {
         List<Component> lore;
         if (meta.hasLore()) {
@@ -65,6 +66,7 @@ public class TextUtil {
         return meta;
     }
 
+    @Deprecated
     public static void appendQuestItemLore(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         itemStack.setItemMeta(appendQuestItemLore(meta));

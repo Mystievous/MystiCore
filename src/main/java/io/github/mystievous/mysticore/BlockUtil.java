@@ -9,7 +9,14 @@ import org.bukkit.block.data.BlockData;
 public class BlockUtil {
 
     public static void fillBlocks(BlockData blockData, Location corner1, Location corner2) {
-        checkerBlocks(blockData, blockData, corner1, corner2);
+        for (int x = corner1.getBlockX(); x <= corner2.getBlockX(); x++) {
+            for (int y = corner1.getBlockY(); y <= corner2.getBlockY(); y++) {
+                for (int z = corner1.getBlockZ(); z <= corner2.getBlockZ(); z++) {
+                    Location location = new Location(corner1.getWorld(), x, y, z);
+                    location.getBlock().setBlockData(blockData);
+                }
+            }
+        }
     }
 
     public static void fillBlocks(Material material, Location corner1, Location corner2) {
