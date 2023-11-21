@@ -3,12 +3,14 @@ package io.github.mystievous.mysticore.interact;
 import io.github.mystievous.mysticore.NBTUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -27,6 +29,7 @@ public class UsableItem implements Listener {
 
     private ItemStack template;
     private Consumer<PlayerInteractEvent> useAction;
+    private String permission;
 
     /**
      * Creates a new Wand instance with the given plugin, type, template, and interaction consumer.
@@ -55,6 +58,15 @@ public class UsableItem implements Listener {
 
     public void setUseAction(Consumer<PlayerInteractEvent> useAction) {
         this.useAction = useAction;
+    }
+
+    /**
+     * Sets the permission required to use this item
+     *
+     * @param permission The permission string
+     */
+    public void setPermission(@Nullable String permission) {
+        this.permission = permission;
     }
 
     /**
@@ -95,7 +107,9 @@ public class UsableItem implements Listener {
                 || event.getAction() == Action.LEFT_CLICK_BLOCK
                 || item == null)
             return;
-        if (useAction != null && matchItem(item)) {
+        Player player = event.getPlayer();
+        if (useAction != null && matchItem(item) &&
+                (permission == null || player.hasPermission(permission))) {
             useAction.accept(event);
         }
     }
