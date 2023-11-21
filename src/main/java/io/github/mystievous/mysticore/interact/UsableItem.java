@@ -26,7 +26,7 @@ public class UsableItem implements Listener {
     private final NamespacedKey typeKey;
 
     private ItemStack template;
-    private final Consumer<PlayerInteractEvent> useAction;
+    private Consumer<PlayerInteractEvent> useAction;
 
     /**
      * Creates a new Wand instance with the given plugin, type, template, and interaction consumer.
@@ -51,6 +51,10 @@ public class UsableItem implements Listener {
      */
     public String getType() {
         return type;
+    }
+
+    public void setUseAction(Consumer<PlayerInteractEvent> useAction) {
+        this.useAction = useAction;
     }
 
     /**

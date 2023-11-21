@@ -155,8 +155,8 @@ public class NBTUtils implements Listener {
             return;
         CraftingInventory inventory = event.getInventory();
         for (ItemStack item : inventory.getMatrix()) {
-            if (isNoUse(item)) {
-                event.getWhoClicked().sendMessage(Component.text("You can't craft with that!"));
+            if (item != null && isNoUse(item)) {
+                event.getWhoClicked().sendMessage(Component.text("You can't craft with ").append(TextUtil.getItemName(item)).append(Component.text(".")).color(Palette.NEGATIVE_COLOR.toTextColor()));
                 event.setCancelled(true);
                 return;
             }
