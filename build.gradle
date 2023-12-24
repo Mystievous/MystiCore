@@ -1,10 +1,15 @@
 plugins {
     id 'java'
     id "maven-publish"
+    id "com.github.johnrengelman.shadow" version "7.1.1"
 }
 
 group = 'io.github.mystievous'
 version = System.getenv("VERSION") ?: '0.0.0-dev'
+
+shadowJar {
+    relocate 'com.jeff_media.morepersistentdatatypes', 'io.github.mystievous.mysticore.morepersistentdatatypes'
+}
 
 repositories {
     mavenCentral()
@@ -18,13 +23,13 @@ repositories {
     }
     maven {
         name = "persistent-data-types-repo"
-        url = "https://hub.jeff-media.com/nexus/repository/jeff-media-public/"
+        url = 'https://hub.jeff-media.com/nexus/repository/jeff-media-public/'
     }
 }
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT"
-    implementation "com.jeff_media:MorePersistentDataTypes:2.4.0"
+    implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
 }
 
 def targetJavaVersion = 17
