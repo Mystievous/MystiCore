@@ -166,7 +166,7 @@ public class NBTUtils implements Listener {
     @EventHandler
     public void onPlayerShoot(final EntityShootBowEvent event) {
         ItemStack item = event.getConsumable();
-        if (isNoUse(item)) {
+        if (item != null && isNoUse(item)) {
             event.getEntity().sendMessage(TextUtil.formatText("The arrow falls out of your bow as you try to shoot.").decoration(TextDecoration.ITALIC, true));
             event.setCancelled(true);
         }
@@ -176,7 +176,7 @@ public class NBTUtils implements Listener {
     public void onCrossbowLoad(final EntityLoadCrossbowEvent event) {
         if (event.getEntity() instanceof InventoryHolder inventoryHolder) {
             for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
-                if (isNoUse(itemStack)) {
+                if (itemStack != null && isNoUse(itemStack)) {
                     event.getEntity().sendMessage(TextUtil.formatText("The arrow falls out of your crossbow as you try to load it.").decoration(TextDecoration.ITALIC, true));
                     event.setCancelled(true);
                     return;
