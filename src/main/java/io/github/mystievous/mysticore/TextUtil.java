@@ -1,6 +1,7 @@
 package io.github.mystievous.mysticore;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
@@ -83,6 +84,14 @@ public class TextUtil {
 
     public static Component space(int space) {
         return Component.translatable(String.format("space.%d", space));
+    }
+
+    public static Component errorMessage(Component text) {
+        return text.color(Palette.NEGATIVE_COLOR.toTextColor());
+    }
+
+    public static Component errorMessage(String text) {
+        return errorMessage(Component.text(text));
     }
 
 }
