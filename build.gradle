@@ -8,6 +8,8 @@ group = 'io.github.mystievous'
 version = System.getenv("VERSION") ?: '0.0.0-dev'
 
 shadowJar {
+    baseName = 'myproject-all'
+    classifier = ''
     relocate 'com.jeff_media.morepersistentdatatypes', 'io.github.mystievous.mysticore.morepersistentdatatypes'
 }
 
@@ -74,7 +76,10 @@ publishing {
             groupId 'io.github.mystievous'
             artifactId 'mysticore'
             from components.java
-            artifact shadowJar
+        }
+        shadow(MavenPublication) {
+            from components.shadow
+            artifactId = 'myproject-all'
         }
     }
 }
