@@ -73,7 +73,8 @@ publishing {
         gpr(MavenPublication) {
             groupId 'io.github.mystievous'
             artifactId 'mysticore'
-            from components.shadow
+            from components.java
+            artifact shadowJar
         }
     }
 }
