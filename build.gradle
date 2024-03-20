@@ -70,15 +70,16 @@ publishing {
         }
     }
     publications {
-        gpr(MavenPublication) {
-            groupId 'io.github.mystievous'
-            artifactId 'mysticore'
-            from components.java
-        }
+//        gpr(MavenPublication) {
+//            groupId 'io.github.mystievous'
+//            artifactId 'mysticore'
+//            from components.java
+//        }
         shadow(MavenPublication) {
-            from components.java
-            artifactId 'mysticore-all'
-            artifact shadowJar
+            publication ->
+                from project.shadow.component(publication)
+                groupId 'io.github.mystievous'
+                artifactId 'mysticore'
         }
     }
 }
