@@ -4,6 +4,11 @@ import de.exlll.configlib.Comment;
 import de.exlll.configlib.Configuration;
 import de.exlll.configlib.YamlConfigurations;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,10 +24,21 @@ public class Palette {
         Path configPath = Paths.get(MystiCore.getInstance().getDataFolder().getPath(), "palette.yml");
         PaletteConfiguration config = YamlConfigurations.update(configPath, PaletteConfiguration.class);
 
-        PRIMARY = new Color(config.primary);
-        SECONDARY = new Color(config.secondary);
-        NEGATIVE_COLOR = new Color(config.negative);
-        GRAYED_OUT = new Color(config.grayedOut);
+        Color primary = new Color(config.primary);
+        Color secondary = new Color(config.secondary);
+        Color negative = new Color(config.negative);
+        Color grayedOut = new Color(config.grayedOut);
+
+        PaletteReloadEvent event = new PaletteReloadEvent(primary, secondary, negative, grayedOut);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        PRIMARY = event.getPrimary();
+        SECONDARY = event.getSecondary();
+        NEGATIVE_COLOR = event.getNegative();
+        GRAYED_OUT = event.getGrayedOut();
     }
 
     @Configuration
@@ -34,6 +50,75 @@ public class Palette {
 
         public String grayedOut = Integer.toHexString(0x8e8e8e);
 
+    }
+
+    public static class PaletteReloadEvent extends Event implements Cancellable {
+        private static final HandlerList HANDLERS_LIST = new HandlerList();
+
+        @Override
+        public @NotNull HandlerList getHandlers() {
+            return HANDLERS_LIST;
+        }
+
+        public static HandlerList getHandlerList() {
+            return HANDLERS_LIST;
+        }
+
+        private boolean cancelled = false;
+
+        private Color primary;
+        private Color secondary;
+        private Color negative;
+        private Color grayedOut;
+
+        public PaletteReloadEvent(Color primary, Color secondary, Color negative, Color grayedOut) {
+            this.primary = primary;
+            this.secondary = secondary;
+            this.negative = negative;
+            this.grayedOut = grayedOut;
+        }
+
+        public Color getPrimary() {
+            return primary;
+        }
+
+        public void setPrimary(Color primary) {
+            this.primary = primary;
+        }
+
+        public Color getSecondary() {
+            return secondary;
+        }
+
+        public void setSecondary(Color secondary) {
+            this.secondary = secondary;
+        }
+
+        public Color getNegative() {
+            return negative;
+        }
+
+        public void setNegative(Color negative) {
+            this.negative = negative;
+        }
+
+        public Color getGrayedOut() {
+            return grayedOut;
+        }
+
+        public void setGrayedOut(Color grayedOut) {
+            this.grayedOut = grayedOut;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        @Override
+        public void setCancelled(boolean cancelled) {
+            this.cancelled = cancelled;
+        }
 
     }
 
