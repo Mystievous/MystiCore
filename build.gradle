@@ -70,16 +70,10 @@ publishing {
         }
     }
     publications {
-        unshadowedJar(MavenPublication) {
-            from components.java
-            groupId 'io.github.mystievous'
-            artifactId 'mysticore'
-        }
-        shadow(MavenPublication) {
-            publication ->
-                from project.shadow.component(publication)
-                groupId 'io.github.mystievous'
-                artifactId 'mysticore'
+        Library(MavenPublication) {
+            from project.components.java
+            artifact tasks.sourceJar
+            artifact tasks.shadowJar
         }
     }
 }
