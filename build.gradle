@@ -11,6 +11,11 @@ shadowJar {
     relocate 'com.jeff_media.morepersistentdatatypes', 'io.github.mystievous.mysticore.morepersistentdatatypes'
 }
 
+sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
 repositories {
     mavenCentral()
     maven {
