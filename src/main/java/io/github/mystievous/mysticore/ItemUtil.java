@@ -1,6 +1,7 @@
 package io.github.mystievous.mysticore;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,7 +14,7 @@ public class ItemUtil {
         ItemStack item = new ItemStack(material);
         item.editMeta(itemMeta -> {
             if (name != null) {
-                itemMeta.displayName(name);
+                itemMeta.displayName(name.decoration(TextDecoration.ITALIC, false));
             }
             if (customModelData != 0) {
                 itemMeta.setCustomModelData(customModelData);
