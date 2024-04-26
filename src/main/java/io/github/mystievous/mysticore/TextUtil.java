@@ -44,35 +44,6 @@ public class TextUtil {
         return Arrays.stream(text).map(TextUtil::formatText).collect(Collectors.toList());
     }
 
-    public static Component getItemName(@NotNull ItemStack item) {
-        if (item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
-            return meta.hasDisplayName() ? meta.displayName() : Component.translatable(item.translationKey());
-        } else {
-            return Component.translatable(item.translationKey());
-        }
-    }
-
-    @Deprecated
-    public static ItemMeta appendQuestItemLore(ItemMeta meta) {
-        List<Component> lore;
-        if (meta.hasLore()) {
-            lore = meta.lore();
-            assert lore != null;
-        } else {
-            lore = new ArrayList<>();
-        }
-        lore.add(formatText("Quest Item").decoration(TextDecoration.ITALIC, true));
-        meta.lore(lore);
-        return meta;
-    }
-
-    @Deprecated
-    public static void appendQuestItemLore(ItemStack itemStack) {
-        ItemMeta meta = itemStack.getItemMeta();
-        itemStack.setItemMeta(appendQuestItemLore(meta));
-    }
-
     public static String formatBlockType(Material material) {
         String name = material.name().toLowerCase();
         StringBuilder output = new StringBuilder();
