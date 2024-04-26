@@ -76,9 +76,10 @@ publishing {
             artifactId 'mysticore'
         }
         shadow(MavenPublication) {
-            from project.shadow.component(publication)
-            groupId 'io.github.mystievous'
-            artifactId 'mysticore'
+            publication ->
+                from project.shadow.component(publication)
+                groupId 'io.github.mystievous'
+                artifactId 'mysticore'
         }
     }
 }
