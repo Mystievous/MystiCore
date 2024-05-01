@@ -27,7 +27,7 @@ public class UsableItem implements Listener {
     private final String type;
     private final NamespacedKey typeKey;
 
-    private ItemStack template;
+    private final ItemStack template;
     private Consumer<PlayerInteractEvent> useAction;
     private String permission;
 
@@ -35,7 +35,7 @@ public class UsableItem implements Listener {
      * Creates a new Wand instance with the given plugin, type, template, and interaction consumer.
      *
      * @param plugin    The plugin that owns the wand.
-     * @param type       The string used to identify the wand type.
+     * @param type      The string used to identify the wand type.
      * @param template  The template ItemStack representing the wand.
      * @param useAction The consumer that handles the interaction event.
      */
@@ -76,9 +76,10 @@ public class UsableItem implements Listener {
      */
     public ItemStack getItem() {
         ItemStack itemStack = this.template.clone();
-        if (!itemStack.hasItemMeta())
-            return itemStack;
-        return NBTUtils.applyToItemMeta(itemStack, itemMeta -> NBTUtils.setString(typeKey, itemMeta, type));
+        itemStack.editMeta(itemMeta -> {
+            NBTUtils.setString(typeKey, itemMeta, type);
+        });
+        return itemStack;
     }
 
     /**
@@ -88,8 +89,6 @@ public class UsableItem implements Listener {
      * @return True if the ItemStack matches the wand's type, false otherwise.
      */
     private boolean matchItem(ItemStack item) {
-        if (!item.hasItemMeta())
-            return false;
         String itemType = NBTUtils.getString(typeKey, item.getItemMeta());
         return type.equals(itemType);
     }

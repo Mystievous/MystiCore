@@ -31,10 +31,12 @@ public class NBTUtils implements Listener {
     /**
      * Key name for the UUID in the persistent data
      */
+    @Deprecated
     public static final String UNIQUE_ID = "unique_id";
 
     public static final String NO_STACK = "no_stack";
 
+    @Deprecated
     public static ItemStack applyToItemMeta(ItemStack itemStack, Function<ItemMeta, ItemMeta> consumer) {
         if (itemStack == null || !itemStack.hasItemMeta())
             return itemStack;
@@ -52,7 +54,9 @@ public class NBTUtils implements Listener {
      */
     public static ItemStack noStack(ItemStack itemStack) {
         NamespacedKey key = MYSTICORE_KEY(NO_STACK);
-        applyToItemMeta(itemStack, (meta) -> setUUID(key, meta, UUID.randomUUID()));
+        itemStack.editMeta(itemMeta -> {
+            setUUID(key, itemMeta, UUID.randomUUID());
+        });
         return itemStack;
     }
 
@@ -136,7 +140,10 @@ public class NBTUtils implements Listener {
     public static final NamespacedKey NO_USE_KEY = MYSTICORE_KEY(NO_USE_TAG);
 
     public static ItemStack setNoUse(ItemStack itemStack) {
-        return applyToItemMeta(itemStack, itemMeta -> setBool(NO_USE_KEY, itemMeta));
+        itemStack.editMeta(itemMeta -> {
+            setBool(NO_USE_KEY, itemMeta);
+        });
+        return itemStack;
     }
 
     public static ItemMeta setNoUse(ItemMeta itemMeta) {
@@ -165,6 +172,8 @@ public class NBTUtils implements Listener {
 
     @EventHandler
     public void onPlayerShoot(final EntityShootBowEvent event) {
+        if (event.isCancelled())
+            return;
         ItemStack item = event.getConsumable();
         if (item != null && isNoUse(item)) {
             event.getEntity().sendMessage(TextUtil.formatText("The arrow falls out of your bow as you try to shoot.").decoration(TextDecoration.ITALIC, true));
@@ -174,6 +183,8 @@ public class NBTUtils implements Listener {
 
     @EventHandler
     public void onCrossbowLoad(final EntityLoadCrossbowEvent event) {
+        if (event.isCancelled())
+            return;
         if (event.getEntity() instanceof InventoryHolder inventoryHolder) {
             for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
                 if (itemStack != null && isNoUse(itemStack)) {
@@ -187,231 +198,13 @@ public class NBTUtils implements Listener {
 
     @EventHandler
     public void onPotionDrink(final PlayerItemConsumeEvent event) {
+        if (event.isCancelled())
+            return;
         ItemStack item = event.getItem();
         if (isNoUse(item)) {
             event.getPlayer().sendMessage(TextUtil.formatText("You can't use that."));
             event.setCancelled(true);
         }
-    }
-
-    /**
-     * Converts a boolean into a byte value
-     *
-     * @param value The boolean to convert
-     * @return The byte equivalent
-     */
-    @Deprecated
-    private static byte boolToByte(boolean value) {
-        return (byte) (value ? 1 : 0);
-    }
-
-    /**
-     * Converts a byte value into a boolean
-     *
-     * @param value The byte to convert
-     * @return The boolean equivalent
-     */
-    @Deprecated
-    private static boolean byteToBool(byte value) {
-        return value == (byte) 1;
-    }
-
-    /**
-     * Sets an item to not stack with others,
-     * using a generated UUID tag.
-     *
-     * @param plugin    The plugin to use for the data.
-     * @param itemStack The item to set.
-     * @return The same item.
-     */
-    @Deprecated
-    public static ItemStack noStack(Plugin plugin, ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType().isAir())
-            return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(NO_STACK, plugin);
-        if (key == null)
-            return itemStack;
-        ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(key, DataType.UUID, UUID.randomUUID());
-        itemStack.setItemMeta(meta);
-        return itemStack;
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> T setUniqueID(Plugin plugin, String tag, T dataHolder, UUID uuid) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return dataHolder;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        if (uuid != null) {
-            container.set(key, DataType.UUID, uuid);
-        } else {
-            container.remove(key);
-        }
-        return dataHolder;
-    }
-
-    @Deprecated
-    public static ItemStack setUniqueID(Plugin plugin, String tag, ItemStack itemStack, UUID uuid) {
-        itemStack.setItemMeta(setUniqueID(plugin, tag, itemStack.getItemMeta(), uuid));
-        return itemStack;
-    }
-
-    @Deprecated
-    public static ItemStack setUniqueID(Plugin plugin, ItemStack itemStack, UUID uuid) {
-        return setUniqueID(plugin, UNIQUE_ID, itemStack, uuid);
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> boolean hasUniqueID(Plugin plugin, T dataHolder) {
-        NamespacedKey key = NamespacedKey.fromString(UNIQUE_ID, plugin);
-        if (key == null)
-            return false;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        return container.has(key);
-    }
-
-    @Deprecated
-    public static boolean hasUniqueID(Plugin plugin, ItemStack itemStack) {
-        return hasUniqueID(plugin, itemStack.getItemMeta());
-    }
-
-    @Deprecated
-    public static @Nullable <T extends PersistentDataHolder> UUID getUniqueID(Plugin plugin, String tag, T dataHolder) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return null;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        return container.get(key, DataType.UUID);
-    }
-
-    @Deprecated
-    public static @Nullable UUID getUniqueID(Plugin plugin, String tag, ItemStack itemStack) {
-        return getUniqueID(plugin, tag, itemStack.getItemMeta());
-    }
-
-    @Deprecated
-    public static @Nullable UUID getUniqueID(Plugin plugin, ItemStack itemStack) {
-        return getUniqueID(plugin, UNIQUE_ID, itemStack);
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> T setLocation(Plugin plugin, String tag, T dataHolder, Location location) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return dataHolder;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        container.set(key, DataType.LOCATION, location);
-        return dataHolder;
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> Location getLocation(Plugin plugin, String tag, T dataHolder) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return null;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        return container.get(key, DataType.LOCATION);
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> T setBool(Plugin plugin, String tag, T dataHolder, boolean tagState) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return dataHolder;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        container.set(key, PersistentDataType.BYTE, boolToByte(tagState));
-        return dataHolder;
-    }
-
-    /**
-     * Sets and item's tag to the specified state
-     *
-     * @param tag       tag to set
-     * @param itemStack item to set tag on
-     * @param tagState  state to set tag to
-     * @return the item with the tag changed
-     */
-    @Deprecated
-    public static ItemStack setBool(Plugin plugin, String tag, @NotNull ItemStack itemStack, boolean tagState) {
-        itemStack.setItemMeta(setBool(plugin, tag, itemStack.getItemMeta(), tagState));
-        return itemStack;
-    }
-
-    /**
-     * Sets and item's tag to true
-     *
-     * @param tag       tag to set
-     * @param itemStack item to set tag on
-     * @return the item with the tag changed
-     */
-    @Deprecated
-    public static ItemStack setBool(Plugin plugin, String tag, @NotNull ItemStack itemStack) {
-        return setBool(plugin, tag, itemStack, true);
-    }
-
-    @Deprecated
-    public static <T extends PersistentDataHolder> boolean getBool(Plugin plugin, String tag, T dataHolder) {
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return false;
-        PersistentDataContainer container = dataHolder.getPersistentDataContainer();
-        return byteToBool(container.getOrDefault(key, PersistentDataType.BYTE, (byte) 0));
-    }
-
-    /**
-     * Checks if a certain tag is true on an item
-     *
-     * @param tag       the tag to check
-     * @param itemStack the item to check the tag on
-     * @return the value of the boolean tag
-     */
-    @Deprecated
-    public static boolean getBool(Plugin plugin, String tag, ItemStack itemStack) {
-        if (itemStack != null && itemStack.hasItemMeta()) {
-            return getBool(plugin, tag, itemStack.getItemMeta());
-        } else {
-            return false;
-        }
-    }
-
-    @Deprecated
-    public static @Nullable String getString(Plugin plugin, String tag, ItemStack itemStack) {
-        if (itemStack == null || !itemStack.hasItemMeta())
-            return null;
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return null;
-        ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.get(key, PersistentDataType.STRING);
-    }
-
-    @Deprecated
-    public static ItemStack setString(Plugin plugin, String tag, ItemStack itemStack, String string) {
-        if (itemStack == null || itemStack.getType().isAir())
-            return itemStack;
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return itemStack;
-        ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(key, PersistentDataType.STRING, string);
-        itemStack.setItemMeta(meta);
-        return itemStack;
-    }
-
-    @Deprecated
-    public static boolean hasTag(Plugin plugin, String tag, ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType().isAir())
-            return false;
-        NamespacedKey key = NamespacedKey.fromString(tag, plugin);
-        if (key == null)
-            return false;
-        ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.has(key);
     }
 
 }
