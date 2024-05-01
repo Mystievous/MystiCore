@@ -70,6 +70,10 @@ public class UsableItemManager implements Listener {
         private UsableItem(String type, ItemStack template, Consumer<PlayerInteractEvent> onUse) {
             this.type = type;
             this.template = template;
+            this.template.editMeta(itemMeta -> {
+                NBTUtils.setString(TYPE_KEY, itemMeta, type);
+                itemMeta.setMaxStackSize(1);
+            });
             setOnUse(onUse);
         }
 
@@ -95,11 +99,7 @@ public class UsableItemManager implements Listener {
          * @return The ItemStack representing the wand.
          */
         public ItemStack getItem() {
-            ItemStack itemStack = this.template.clone();
-            itemStack.editMeta(itemMeta -> {
-                NBTUtils.setString(TYPE_KEY, itemMeta, type);
-            });
-            return itemStack;
+            return this.template.clone();
         }
 
     }

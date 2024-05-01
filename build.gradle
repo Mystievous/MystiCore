@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id "maven-publish"
-    id "com.github.johnrengelman.shadow" version "7.1.1"
+    id "io.github.goooler.shadow" version "8.1.7"
 }
 
 group = 'io.github.mystievous'
@@ -22,18 +22,23 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven {
+        name = "sonatype-oss-snapshots1"
+        url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+    }
+    maven {
         name = "persistent-data-types-repo"
         url = 'https://hub.jeff-media.com/nexus/repository/jeff-media-public/'
     }
+
 }
 
 dependencies {
-    compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
+    compileOnly "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
     implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
     compileOnly "de.exlll:configlib-paper:4.5.0"
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion

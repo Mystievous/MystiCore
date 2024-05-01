@@ -14,12 +14,11 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -52,10 +51,10 @@ public class NBTUtils implements Listener {
      * @param itemStack The item to set.
      * @return The same item.
      */
+    @Deprecated
     public static ItemStack noStack(ItemStack itemStack) {
-        NamespacedKey key = MYSTICORE_KEY(NO_STACK);
         itemStack.editMeta(itemMeta -> {
-            setUUID(key, itemMeta, UUID.randomUUID());
+            itemMeta.setMaxStackSize(1);
         });
         return itemStack;
     }
@@ -142,6 +141,10 @@ public class NBTUtils implements Listener {
     public static ItemStack setNoUse(ItemStack itemStack) {
         itemStack.editMeta(itemMeta -> {
             setBool(NO_USE_KEY, itemMeta);
+            if (itemMeta instanceof Damageable damageable) {
+                damageable.setMaxDamage(null);
+            }
+            itemMeta.setFireResistant(true);
         });
         return itemStack;
     }
