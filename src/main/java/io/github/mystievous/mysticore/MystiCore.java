@@ -1,13 +1,11 @@
 package io.github.mystievous.mysticore;
 
 import io.github.mystievous.mysticore.commands.ReloadPalette;
+import io.github.mystievous.mysticore.interact.UsableItemManager;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.swing.*;
 
 public class MystiCore extends JavaPlugin {
 
@@ -21,6 +19,10 @@ public class MystiCore extends JavaPlugin {
         }
     }
 
+    public static ComponentLogger getPluginLogger() {
+        return me.getComponentLogger();
+    }
+
     @Override
     public void onEnable() {
         me = this;
@@ -28,7 +30,7 @@ public class MystiCore extends JavaPlugin {
         try {
             Palette.reloadColors();
         } catch (Exception e) {
-            Bukkit.getLogger().warning(e.getMessage());
+            getComponentLogger().warn(e.getMessage());
             e.printStackTrace();
         }
 
@@ -39,6 +41,9 @@ public class MystiCore extends JavaPlugin {
 
         NBTUtils nbtUtils = new NBTUtils();
         Bukkit.getPluginManager().registerEvents(nbtUtils, this);
+
+        UsableItemManager usableItemManager = new UsableItemManager();
+        Bukkit.getPluginManager().registerEvents(usableItemManager, this);
     }
 
     @Override
