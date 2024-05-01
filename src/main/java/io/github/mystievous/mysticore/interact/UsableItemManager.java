@@ -2,6 +2,7 @@ package io.github.mystievous.mysticore.interact;
 
 import io.github.mystievous.mysticore.MystiCore;
 import io.github.mystievous.mysticore.NBTUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,7 +63,6 @@ public class UsableItemManager implements Listener {
         /**
          * Creates a new Wand instance with the given plugin, type, template, and interaction consumer.
          *
-         * @param plugin   The plugin that owns the wand.
          * @param type     The string used to identify the wand type.
          * @param template The template ItemStack representing the wand.
          * @param onUse    The consumer that handles the interaction event.
@@ -74,6 +74,9 @@ public class UsableItemManager implements Listener {
         }
 
         public void setOnUse(Consumer<PlayerInteractEvent> onUse) {
+            if (actions.containsKey(type)) {
+                MystiCore.getPluginLogger().warn(Component.text("Usable Item Action [" + type + "] is already defined."));
+            }
             actions.put(type, onUse);
         }
 
