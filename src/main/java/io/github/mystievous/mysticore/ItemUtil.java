@@ -41,16 +41,14 @@ public class ItemUtil {
         }
     }
 
-    public static void hideAttributes(ItemStack itemStack) {
-        itemStack.editMeta(itemMeta -> {
-            itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(UUID.randomUUID(), "HideAttributes", 0, AttributeModifier.Operation.ADD_NUMBER));
-            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        });
+    public static void hideAttributes(ItemMeta itemMeta) {
+        itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(UUID.randomUUID(), "HideAttributes", 0, AttributeModifier.Operation.ADD_NUMBER));
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     }
 
-    public static void hideExtraTooltip(ItemStack itemStack) {
-        hideAttributes(itemStack);
-        itemStack.addItemFlags(
+    public static void hideExtraTooltip(ItemMeta itemMeta) {
+        hideAttributes(itemMeta);
+        itemMeta.addItemFlags(
                 ItemFlag.HIDE_ATTRIBUTES,
                 ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
                 ItemFlag.HIDE_DYE,
