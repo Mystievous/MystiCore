@@ -1,7 +1,10 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
-import io.github.mystievous.mysticore.commands.ReloadPalette;
-import io.github.mystievous.mysticore.interact.UsableItemManager;
+import com.starseekstudios.mysticore.commands.PaletteCommand;
+import com.starseekstudios.mysticore.interact.UsableItemManager;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIConfig;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -24,7 +27,14 @@ public class MystiCore extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).usePluginNamespace());
+    }
+
+    @Override
     public void onEnable() {
+        CommandAPI.onEnable();
+
         me = this;
         // Plugin startup logic
         try {
@@ -34,10 +44,7 @@ public class MystiCore extends JavaPlugin {
             e.printStackTrace();
         }
 
-        PluginCommand command = Bukkit.getPluginCommand("paletteReload");
-        if (command != null) {
-            command.setExecutor(new ReloadPalette());
-        }
+        CommandAPI.registerCommand(PaletteCommand.class);
 
         NBTUtils nbtUtils = new NBTUtils();
         Bukkit.getPluginManager().registerEvents(nbtUtils, this);

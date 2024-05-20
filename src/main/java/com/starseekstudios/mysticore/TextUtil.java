@@ -1,16 +1,11 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +53,7 @@ public class TextUtil {
     }
 
     public static Component errorMessage(Component text) {
-        return text.color(Palette.NEGATIVE_COLOR.toTextColor());
+        return text.color(Palette.NEGATIVE.toTextColor());
     }
 
     public static Component errorMessage(String text) {

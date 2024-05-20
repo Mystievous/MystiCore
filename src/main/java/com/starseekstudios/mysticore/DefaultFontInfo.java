@@ -1,4 +1,4 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import org.jetbrains.annotations.NotNull;
 

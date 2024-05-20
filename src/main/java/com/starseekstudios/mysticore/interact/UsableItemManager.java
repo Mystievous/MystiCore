@@ -1,7 +1,7 @@
-package io.github.mystievous.mysticore.interact;
+package com.starseekstudios.mysticore.interact;
 
-import io.github.mystievous.mysticore.MystiCore;
-import io.github.mystievous.mysticore.NBTUtils;
+import com.starseekstudios.mysticore.MystiCore;
+import com.starseekstudios.mysticore.NBTUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

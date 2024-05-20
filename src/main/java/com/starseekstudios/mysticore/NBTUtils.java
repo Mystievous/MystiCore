@@ -1,4 +1,4 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
@@ -166,7 +166,7 @@ public class NBTUtils implements Listener {
         CraftingInventory inventory = event.getInventory();
         for (ItemStack item : inventory.getMatrix()) {
             if (item != null && isNoUse(item)) {
-                event.getWhoClicked().sendMessage(Component.text("You can't craft with ").append(ItemUtil.getItemName(item)).append(Component.text(".")).color(Palette.NEGATIVE_COLOR.toTextColor()));
+                event.getWhoClicked().sendMessage(Component.text("You can't craft with ").append(ItemUtil.getItemName(item)).append(Component.text(".")).color(Palette.NEGATIVE.toTextColor()));
                 event.setCancelled(true);
                 return;
             }

@@ -1,4 +1,4 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;

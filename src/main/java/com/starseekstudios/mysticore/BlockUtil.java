@@ -1,9 +1,8 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 
 public class BlockUtil {

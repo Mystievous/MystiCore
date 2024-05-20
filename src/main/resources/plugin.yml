@@ -1,11 +1,6 @@
 name: MystiCore
 version: '${version}'
-main: io.github.mystievous.mysticore.MystiCore
+main: com.starseekstudios.mysticore.MystiCore
 api-version: '1.20'
 authors: [ Mystievous ]
 description: Core library for Mystievous' Plugins
-depend: [ ConfigLib ]
-commands:
-  paletteReload:
-    description: Reloads the color palette
-    permission: mysticore.reload

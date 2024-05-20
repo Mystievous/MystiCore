@@ -1,4 +1,4 @@
-package io.github.mystievous.mysticore;
+package com.starseekstudios.mysticore;
 
 import de.exlll.configlib.Comment;
 import de.exlll.configlib.Configuration;
@@ -17,8 +17,8 @@ public class Palette {
 
     public static Color PRIMARY = new Color(0x44b9ad);
     public static Color SECONDARY = new Color(0x6c8784);
-    public static Color NEGATIVE_COLOR = new Color(NamedTextColor.DARK_RED.value());
-    public static Color GRAYED_OUT = new Color(0x8e8e8e);
+    public static Color NEGATIVE = new Color(NamedTextColor.DARK_RED.value());
+    public static Color DISABLED = new Color(0x8e8e8e);
 
     public static void reloadColors() {
         Path configPath = Paths.get(MystiCore.getInstance().getDataFolder().getPath(), "palette.yml");
@@ -27,9 +27,9 @@ public class Palette {
         Color primary = new Color(config.primary);
         Color secondary = new Color(config.secondary);
         Color negative = new Color(config.negative);
-        Color grayedOut = new Color(config.grayedOut);
+        Color disabled = new Color(config.disabled);
 
-        PaletteReloadEvent event = new PaletteReloadEvent(primary, secondary, negative, grayedOut);
+        PaletteReloadEvent event = new PaletteReloadEvent(primary, secondary, negative, disabled);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -37,8 +37,8 @@ public class Palette {
 
         PRIMARY = event.getPrimary();
         SECONDARY = event.getSecondary();
-        NEGATIVE_COLOR = event.getNegative();
-        GRAYED_OUT = event.getGrayedOut();
+        NEGATIVE = event.getNegative();
+        DISABLED = event.getDisabled();
     }
 
     @Configuration
@@ -48,7 +48,7 @@ public class Palette {
         public String secondary = Integer.toHexString(0x6c8784);
         public String negative = Integer.toHexString(0xAA0000);
 
-        public String grayedOut = Integer.toHexString(0x8e8e8e);
+        public String disabled = Integer.toHexString(0x8e8e8e);
 
     }
 
@@ -69,13 +69,13 @@ public class Palette {
         private Color primary;
         private Color secondary;
         private Color negative;
-        private Color grayedOut;
+        private Color disabled;
 
-        public PaletteReloadEvent(Color primary, Color secondary, Color negative, Color grayedOut) {
+        public PaletteReloadEvent(Color primary, Color secondary, Color negative, Color disabled) {
             this.primary = primary;
             this.secondary = secondary;
             this.negative = negative;
-            this.grayedOut = grayedOut;
+            this.disabled = disabled;
         }
 
         public Color getPrimary() {
@@ -102,12 +102,12 @@ public class Palette {
             this.negative = negative;
         }
 
-        public Color getGrayedOut() {
-            return grayedOut;
+        public Color getDisabled() {
+            return disabled;
         }
 
-        public void setGrayedOut(Color grayedOut) {
-            this.grayedOut = grayedOut;
+        public void setDisabled(Color disabled) {
+            this.disabled = disabled;
         }
 
         @Override
