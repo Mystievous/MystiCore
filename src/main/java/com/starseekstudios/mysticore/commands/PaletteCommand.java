@@ -7,8 +7,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 @Command("palette")
-@Help("Manage palette colors for MystiCore dependant plugins.")
 @Permission("mysticore.palette")
+@Help("Manage palette colors for MystiCore dependant plugins.")
 public class PaletteCommand {
 
     @Default
@@ -29,3 +29,5 @@ public class PaletteCommand {
     }
 
 }
+
+

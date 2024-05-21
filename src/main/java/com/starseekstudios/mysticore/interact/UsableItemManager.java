@@ -34,6 +34,10 @@ public class UsableItemManager implements Listener {
         return new UsableItem(type, template, onUse);
     }
 
+    public static UsableItem getItem(String type, ItemStack template) {
+        return new UsableItem(type, template);
+    }
+
     /**
      * Handles the PlayerInteractEvent and invokes the consumer if applicable.
      *
@@ -60,6 +64,15 @@ public class UsableItemManager implements Listener {
         private final String type;
         private final ItemStack template;
 
+        private UsableItem(String type, ItemStack template) {
+            this.type = type;
+            this.template = template;
+            this.template.editMeta(itemMeta -> {
+                NBTUtils.setString(TYPE_KEY, itemMeta, type);
+                itemMeta.setMaxStackSize(1);
+            });
+        }
+
         /**
          * Creates a new Wand instance with the given plugin, type, template, and interaction consumer.
          *
@@ -68,12 +81,7 @@ public class UsableItemManager implements Listener {
          * @param onUse    The consumer that handles the interaction event.
          */
         private UsableItem(String type, ItemStack template, Consumer<PlayerInteractEvent> onUse) {
-            this.type = type;
-            this.template = template;
-            this.template.editMeta(itemMeta -> {
-                NBTUtils.setString(TYPE_KEY, itemMeta, type);
-                itemMeta.setMaxStackSize(1);
-            });
+            this(type, template);
             setOnUse(onUse);
         }
 
