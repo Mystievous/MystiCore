@@ -1,10 +1,13 @@
 package com.starseekstudios.mysticore;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,7 +45,16 @@ public class ItemUtil {
     }
 
     public static void hideAttributes(ItemMeta itemMeta) {
-        itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(UUID.randomUUID(), "HideAttributes", 0, AttributeModifier.Operation.ADD_NUMBER));
+        NamespacedKey key = NamespacedKey.fromString("hide-attributes-luck", MystiCore.getInstance());
+        if (key == null) {
+            return;
+        }
+        AttributeModifier modifier = new AttributeModifier(key, 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
+        if (itemMeta.hasAttributeModifiers() && itemMeta.getAttributeModifiers(Attribute.GENERIC_LUCK).contains(modifier)) {
+            return;
+        }
+
+        itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(key, 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY));
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     }
 

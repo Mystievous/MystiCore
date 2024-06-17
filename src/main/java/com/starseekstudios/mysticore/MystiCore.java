@@ -4,10 +4,8 @@ import com.starseekstudios.mysticore.commands.PaletteCommand;
 import com.starseekstudios.mysticore.interact.UsableItemManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPIConfig;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MystiCore extends JavaPlugin {

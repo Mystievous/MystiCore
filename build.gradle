@@ -47,12 +47,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
+    compileOnly "io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT"
     implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
     implementation "de.exlll:configlib-paper:4.5.0"
-    implementation "dev.jorel:commandapi-bukkit-shade:9.5.0-SNAPSHOT"
-    compileOnly "dev.jorel:commandapi-annotations:9.4.1"
-    annotationProcessor "dev.jorel:commandapi-annotations:9.4.1"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.5.0"
+    compileOnly "dev.jorel:commandapi-annotations:9.5.0"
+    annotationProcessor "dev.jorel:commandapi-annotations:9.5.0"
 }
 
 def targetJavaVersion = 21
